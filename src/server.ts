@@ -6,6 +6,7 @@ import cors from 'cors'
 import morgan from 'morgan'
 import helmet from 'helmet'
 import { isTest } from '../env.ts'
+import { errorHandler } from './middleware/errorHandler.ts'
 
 const app = express()
 app.use(helmet())
@@ -18,13 +19,15 @@ app.use(
   }),
 )
 
+app.get('/health', (req, res) => {
+  res.send('<button>Click me</button>')
+})
+
 app.use('/api/auth', authRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/habits', habitRoutes)
 
-app.get('/health', (req, res) => {
-  res.send('<button>Click me</button>')
-})
+app.use(errorHandler)
 
 export { app }
 export default app
